@@ -72,8 +72,14 @@ const getRowService = (options, headers) => {
           for(let y in headers){
             let header = headers[y];
             let rowData = row[header];
-  
-            obj[_.camelCase(header)] = rowData;
+            
+            if(y == 0){
+              obj.title = rowData;
+            }
+
+            if(y == 1){
+              obj.value = rowData;
+            }
           }
           data.push(obj)
   
