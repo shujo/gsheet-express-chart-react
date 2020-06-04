@@ -16,6 +16,7 @@ const App = () => {
   const [selectedChartData, setSelectedChartData] = useState([])
   
   const [data, setData] = useState([])
+  const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() =>{
     //1Gt6Z_c2OsxZaE4P0qyJUJ8v4PjdF1DcQO-HiH6XQjQw'
@@ -46,19 +47,22 @@ const App = () => {
 
   const loadRows = async (worksheetId, sheetId, headers) => {
     try {
+      setDataLoading(true)
       let response = await getRows(worksheetId, sheetId, headers)
       
       let result = response.data.map(e => {
         return {
-          title: e.country,
-          value: parseInt(e.cases),
+          title: e.title,
+          value: parseInt(e.value),
           color: randomColor({ luminosity: 'dark', format: 'rgb' })
         }
       })
       setData(result);
-
     } catch (error) {
       console.log(error)
+    }
+    finally{
+      setDataLoading(false)
     }
   }
 
@@ -115,6 +119,7 @@ const App = () => {
             onHeaderChange={onHeaderChange}
             onValueChange={onValueChange}
             onLoadData={onLoadData}
+            dataLoading={dataLoading}
           />
           <Result data={data} />
           <Chart data={data}/>

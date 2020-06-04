@@ -1,11 +1,15 @@
 import React from 'react';
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card, Button, Form, Col, Row, Alert } from 'react-bootstrap';
 
-const AuthForm = ({ worksheetId, onBtnClick, onDisconnect, onInputChange, worksheets, onWorksheetChange, headers, onHeaderChange, onValueChange, onLoadData }) => {
+const AuthForm = ({ worksheetId, onBtnClick, onDisconnect, onInputChange, worksheets, onWorksheetChange, headers, onHeaderChange, onValueChange, onLoadData, dataLoading }) => {
     return(
-        <Card style={{ width: '400px' }}>
+        <Card style={{ width: '420px' }}>
             <Card.Header>Configuration</Card.Header>
             <Card.Body>
+                <Alert variant="warning" style={{ fontSize: '10.5px' }}>
+                    <strong>gsheet-react-demo@gsheet-react-demo.iam.gserviceaccount.com</strong><br/>
+                    Dont forget to add this email in your share settings in your spreadsheet.
+                </Alert>
                 <Form>
                     <Form.Group>
                         <Form.Label>Google Spreadsheet ID:</Form.Label>
@@ -31,22 +35,30 @@ const AuthForm = ({ worksheetId, onBtnClick, onDisconnect, onInputChange, worksh
 
                     {Array.from(headers).length > 0 && (
                         <React.Fragment>
-                            <Form.Group>
-                                <Form.Label>Select Chart Config:</Form.Label>
-                                <Form.Control as="select" custom onChange={(e) => onHeaderChange(e.target.value)}>
-                                    <option>Select Header</option>
-                                    {headers && Array.from(headers).map((e, index) => {
-                                        return <option key={index} value={e}>{e}</option>
-                                    })}
-                                </Form.Control>
-                                <Form.Control className="mt-2" as="select" custom onChange={(e) => onValueChange(e.target.value)}>
-                                    <option>Select Value</option>
-                                    {headers && Array.from(headers).map((e, index) => {
-                                        return <option key={index} value={e}>{e}</option>
-                                    })}
-                                </Form.Control>
+                            <Form.Label>Select Column for Chart Config:</Form.Label>
+                            <Form.Group as={Row}>
+                                <Form.Label column >Header:</Form.Label>
+                                <Col sm={9}>
+                                    <Form.Control as="select" custom onChange={(e) => onHeaderChange(e.target.value)}>
+                                        <option>Select Header</option>
+                                        {headers && Array.from(headers).map((e, index) => {
+                                            return <option key={index} value={e}>{e}</option>
+                                        })}
+                                    </Form.Control>
+                                </Col>
                             </Form.Group>
-                            <Button variant="primary" onClick={(e) => onLoadData(e)}>Load Data</Button>
+                            <Form.Group as={Row}>
+                                <Form.Label column>Value:</Form.Label>
+                                <Col sm={9}>
+                                    <Form.Control className="mt-2" as="select" custom onChange={(e) => onValueChange(e.target.value)}>
+                                        <option>Select Value</option>
+                                        {headers && Array.from(headers).map((e, index) => {
+                                            return <option key={index} value={e}>{e}</option>
+                                        })}
+                                    </Form.Control>
+                                </Col>
+                            </Form.Group>
+                            <Button block variant="success" disabled={ dataLoading ? true : false } onClick={(e) => onLoadData(e)}>{ dataLoading ? "Loading..." : "Load Data" }</Button>
                         </React.Fragment>
                     )}
                     
