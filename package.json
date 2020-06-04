@@ -1,0 +1,32 @@
+{
+  "name": "gsheet-express-chart-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shujo/gsheet-express-chart-react.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shujo/gsheet-express-chart-react/issues"
+  },
+  "homepage": "https://github.com/shujo/gsheet-express-chart-react#readme",
+  "dependencies": {
+    "ckey": "^1.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "google-spreadsheet": "^3.0.11",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
