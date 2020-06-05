@@ -12,8 +12,8 @@ const App = () => {
   const [ worksheetId, setWorksheetId ] = useState('');
   const [ worksheets, setWorksheets ] = useState([]);
   const [ headers, setHeaders ] = useState([]);
-  const [selectedHeader, setSelectedHeader] = useState('')
-  const [selectedChartData, setSelectedChartData] = useState([])
+  const [selectedHeader, setSelectedHeader] = useState('');
+  const [selectedChartData, setSelectedChartData] = useState({ header: '', value: '' })
   
   const [data, setData] = useState([])
   const [dataLoading, setDataLoading] = useState(false);
@@ -32,7 +32,7 @@ const App = () => {
       let response = await getWorksheets(id);
       setWorksheets(response.data);
     } catch (error) {
-      console.log(error);
+      alert(error.response.data.message);
     }
   }
 
@@ -41,7 +41,7 @@ const App = () => {
       let response = await getHeaders(worksheetId, sheetId);
       setHeaders(response.data);
     } catch (error) {
-      console.log(error)
+      alert(error.response.data.message)
     }
   }
 
@@ -59,7 +59,7 @@ const App = () => {
       })
       setData(result);
     } catch (error) {
-      console.log(error)
+      alert(error.response.data.message);
     }
     finally{
       setDataLoading(false)
@@ -73,28 +73,45 @@ const App = () => {
   }
 
   const onWorksheetChange = (value) => {
-    loadHeaders(worksheetId, value)
-    setSelectedHeader(value)
+    if(value === 'Select Sheet'){
+      setSelectedHeader('')
+      setHeaders([]);
+    }else{
+      loadHeaders(worksheetId, value)
+      setSelectedHeader(value)
+    }
   }
 
   const onHeaderChange = (e) => {
-    setSelectedChartData(prev => [...prev, e] )
+    if(e !== 'Select Header'){
+      setSelectedChartData({...selectedChartData, header: e })
+    }else{
+      setSelectedChartData({...selectedChartData, header: '' })
+    }
   }
 
   const onValueChange = (e) => {
-    setSelectedChartData(prev => [...prev, e] )
+    if(e !== 'Select Value'){
+      setSelectedChartData({...selectedChartData, value: e })
+    }else{
+      setSelectedChartData({...selectedChartData, value: '' })
+    }
   }
 
   const onLoadData = (e) => {
     e.preventDefault();
-    loadRows(worksheetId,selectedHeader,selectedChartData)
+    if(selectedChartData.header === '' || selectedChartData.value === ''){
+      alert("Please select header or value for chart config!")
+    }else{
+      let columnHeaders = Object.values(selectedChartData)
+      loadRows(worksheetId,selectedHeader,columnHeaders)
+    }
   }
 
   const onDisconnect = (e) => {
     e.preventDefault();
 
     localStorage.clear();
-
     setWorksheetId('');
     setWorksheets([]);
     setHeaders([]);
